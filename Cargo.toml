@@ -1,0 +1,29 @@
+[package]
+name = "chien"
+version = "0.0.0"
+authors = ["Claire Charron <claire@undeterminant.net>"]
+
+[dependencies]
+iron = "*"
+urlencoded = "*"
+logger = "*"
+router = "*"
+mount = "*"
+persistent = "*"
+cookie = "*"
+bodyparser = "*"
+rustc-serialize = "*"
+rmp = "*"
+rmp-serialize = "*"
+staticfile = "*"
+hyper = "*"
+
+[dependencies.mime]
+git = "https://github.com/Undeterminant/mime.rs.git"
+
+[features]
+unstable = []
+
+[[bin]]
+name = "chien"
+doc = false
