@@ -2,6 +2,7 @@
 extern crate iron;
 extern crate mount;
 extern crate rustc_serialize;
+mod token;
 #[macro_use] mod res;
 mod req;
 
