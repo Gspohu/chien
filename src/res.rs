@@ -33,8 +33,8 @@ macro_rules! req_methods {
         ),*
     ) => {
         match $req.method {
-            $(method::$method => $res,)*
-            _ => err_method_not_allowed()
+            $(::iron::method::$method => $res,)*
+            _ => $crate::res::err_method_not_allowed()
         }
     }
 }

@@ -8,8 +8,9 @@ mod req;
 
 use iron::prelude::*;
 use mount::Mount;
-use self::res::*;
-use self::req::*;
+pub use self::res::*;
+pub use self::req::*;
+pub use self::token::*;
 
 #[derive(RustcEncodable)]
 struct HelloWorld {
