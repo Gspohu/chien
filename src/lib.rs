@@ -1,3 +1,4 @@
+#![feature(plugin)] #![plugin(clippy)]
 #[macro_use] extern crate hyper;
 extern crate iron;
 extern crate mount;

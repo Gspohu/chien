@@ -10,7 +10,6 @@ use std::io::Write;
 
 pub use iron::method;
 pub use iron::status;
-use super::test;
 
 #[derive(Debug)]
 struct UserError;
@@ -42,9 +41,9 @@ macro_rules! req_methods {
 
 #[test]
 fn test_req_methods() {
-    let req1 = unsafe { test::new_req(method::Delete) };
-    let req2 = unsafe { test::new_req(method::Get) };
-    let req3 = unsafe { test::new_req(method::Post) };
+    let req1 = unsafe { super::test::new_req(method::Delete) };
+    let req2 = unsafe { super::test::new_req(method::Get) };
+    let req3 = unsafe { super::test::new_req(method::Post) };
     for &(ref req, ref ok, ref err) in &[
         (req1, Some("DELETE didn't return error"), None),
         (req2, None, Some("GET returned error")),

@@ -6,7 +6,6 @@ use iron::headers::Charset;
 use iron::middleware::BeforeMiddleware;
 use iron::prelude::*;
 use super::res::*;
-use super::test;
 
 pub struct VerifyAcceptable;
 
@@ -43,17 +42,15 @@ fn mime_is_acceptable(m: &Mime) -> bool {
 }
 
 fn charset_is_acceptable(c: &Charset) -> bool {
-    match c {
-        // charset is UTF-8 => UTF-8 is OK
-        &Charset::Ext(ref s) => (
-            s == "utf8" ||
-            s == "UTF8" ||
-            s == "utf-8" ||
-            s == "UTF-8"
-        ),
-
-        // charset is anything else => UTF-8 is not OK
-        _ => false,
+    // charset is UTF-8 => UTF-8 is OK
+    if let &Charset::Ext(ref s) = c {
+        s == "utf8" ||
+        s == "UTF8" ||
+        s == "utf-8" ||
+        s == "UTF-8"
+    // charset is anything else => UTF-8 is not OK
+    } else {
+        false
     }
 }
 
