@@ -6,5 +6,8 @@ chien: Better than chat
 [![Build Status](https://travis-ci.org/Undeterminant/chien.svg?branch=master)](https://travis-ci.org/Undeterminant/chien)
 [![Coverage Status](https://coveralls.io/repos/Undeterminant/chien/badge.svg?branch=master&service=github)](https://coveralls.io/github/Undeterminant/chien?branch=master)
 
-Sort-of forum system which is not quite like a chat, but it's easy to see the
+Sort-of forum system which isn't quite like a chat, but it's easy to see the
 resemblance.
+
+This is a side project that will not be finished for a while, but I put it on
+GitHub because why not?
