@@ -5,6 +5,7 @@ extern crate rustc_serialize;
 mod token;
 #[macro_use] mod res;
 mod req;
+mod test;
 
 use iron::prelude::*;
 use mount::Mount;
@@ -36,4 +37,9 @@ pub fn app() -> App {
     let mut chain = Chain::new(mount);
     chain.link_before(VerifyAcceptable);
     Iron::new(chain)
+}
+
+#[test]
+fn test_app_loads_without_panic() {
+    app();
 }

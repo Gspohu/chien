@@ -30,7 +30,7 @@ pub struct InvalidTokenError;
 pub struct Token(u64, u64);
 
 impl Token {
-    fn new(mut p1: u64, mut p2: u64) -> Token {
+    pub fn new(mut p1: u64, mut p2: u64) -> Token {
         p1 &= 0x0FFF_FFFF_FFFF_FFFF;
         p2 &= 0x0FFF_FFFF_FFFF_FFFF;
         Token(p1, p2)
@@ -136,19 +136,19 @@ fn test_token_invalid() {
     assert_eq!(
         Token::from_str(
             "012345678901234567890"
-        ).err(),
+        ),
         Err(InvalidTokenError)
     );
     assert_eq!(
         Token::from_str(
-            "01234567890123456789!"
-        ).err(),
+            "0123456789012345678!"
+        ),
         Err(InvalidTokenError)
     );
     assert_eq!(
         Token::from_str(
-            "!12345678901234567890"
-        ).err(),
+            "!1234567890123456789"
+        ),
         Err(InvalidTokenError)
     );
 }

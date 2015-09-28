@@ -6,6 +6,7 @@ use iron::headers::Charset;
 use iron::middleware::BeforeMiddleware;
 use iron::prelude::*;
 use super::res::*;
+use super::test;
 
 pub struct VerifyAcceptable;
 
@@ -81,4 +82,8 @@ impl BeforeMiddleware for VerifyAcceptable {
 
         Ok(())
     }
+}
+
+#[test]
+fn test_verify_acceptable() {
 }
