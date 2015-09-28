@@ -27,7 +27,7 @@ const DECODE_TABLE: [u8; 256] = [
 pub struct InvalidTokenError;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Token(u64, u64);
+pub struct Token(pub u64, pub u64);
 
 impl Token {
     pub fn new(mut p1: u64, mut p2: u64) -> Token {
