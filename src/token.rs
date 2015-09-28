@@ -23,7 +23,7 @@ const DECODE_TABLE: [u8; 256] = [
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 ];
 
-
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct InvalidTokenError;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -53,10 +53,7 @@ impl ToString for Token {
             p2 /= 64;
         }
 
-        match String::from_utf8(bs) {
-            Ok(s) => s,
-            Err(_) => unreachable!(),
-        }
+        String::from_utf8(bs).ok().unwrap()
     }
 }
 
@@ -131,5 +128,27 @@ fn test_token_idempotent() {
                 0xfecd6f623bea35d9,
             )
         )
+    );
+}
+
+#[test]
+fn test_token_invalid() {
+    assert_eq!(
+        Token::from_str(
+            "012345678901234567890"
+        ).err(),
+        Err(InvalidTokenError)
+    );
+    assert_eq!(
+        Token::from_str(
+            "01234567890123456789!"
+        ).err(),
+        Err(InvalidTokenError)
+    );
+    assert_eq!(
+        Token::from_str(
+            "!12345678901234567890"
+        ).err(),
+        Err(InvalidTokenError)
     );
 }
