@@ -1,7 +1,7 @@
 use hyper::mime::Attr::Charset;
 use hyper::mime::Value::Utf8;
 use hyper::mime::{Mime, TopLevel, SubLevel};
-use iron::headers::{Accept, AcceptCharset};
+use iron::headers::{Accept, AcceptCharset, Header, qitem};
 use iron::headers::Charset;
 use iron::middleware::BeforeMiddleware;
 use iron::prelude::*;
@@ -81,6 +81,78 @@ impl BeforeMiddleware for VerifyAcceptable {
     }
 }
 
+// TODO: FIX THIS IN MIME CRATE
+//#[test]
+//fn test_acceptable_firefox_accept() {
+//    let mut req = unsafe { super::test::new_req(method::Get) };
+//    let head: &[u8] = b"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+//    req.headers.set(
+//        Accept::parse_header(&[head.to_owned()]).ok().unwrap()
+//    );
+//    assert_eq!(
+//        VerifyAcceptable.before(&mut req).ok(),
+//        Some(())
+//    );
+//}
+//
+//#[test]
+//fn test_acceptable_webkit_accept() {
+//    let mut req = unsafe { super::test::new_req(method::Get) };
+//    let head: &[u8] = b"application/xml,application/xhtml+xml,text/html;q=0.9, text/plain;q=0.8,image/png,*/*;q=0.5";
+//    req.headers.set(
+//        Accept::parse_header(&[head.to_owned()]).ok().unwrap()
+//    );
+//    assert_eq!(
+//        VerifyAcceptable.before(&mut req).ok(),
+//        Some(())
+//    );
+//}
+
 #[test]
-fn test_verify_acceptable() {
+fn test_acceptable_json() {
+    let mut req = unsafe { super::test::new_req(method::Get) };
+    let head: &[u8] = b"application/json";
+    req.headers.set(
+        Accept::parse_header(&[head.to_owned()]).ok().unwrap()
+    );
+    assert_eq!(
+        VerifyAcceptable.before(&mut req).ok(),
+        Some(())
+    );
+}
+
+#[test]
+fn test_unacceptable_html() {
+    let mut req = unsafe { super::test::new_req(method::Get) };
+    let head: &[u8] = b"text/html";
+    req.headers.set(
+        Accept::parse_header(&[head.to_owned()]).ok().unwrap()
+    );
+    assert_eq!(
+        VerifyAcceptable.before(&mut req).ok(),
+        None
+    );
+}
+
+#[test]
+fn test_acceptable_star() {
+    let mut req = unsafe { super::test::new_req(method::Get) };
+    let head: &[u8] = b"*/*";
+    let head: Vec<u8> = head.to_owned();
+    req.headers.set(
+        Accept::parse_header(&[head.to_owned()]).ok().unwrap()
+    );
+    assert_eq!(
+        VerifyAcceptable.before(&mut req).ok(),
+        Some(())
+    );
+}
+
+#[test]
+fn test_acceptable_no_accept() {
+    let mut req = unsafe { super::test::new_req(method::Get) };
+    assert_eq!(
+        VerifyAcceptable.before(&mut req).ok(),
+        Some(())
+    );
 }
