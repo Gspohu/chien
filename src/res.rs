@@ -52,10 +52,10 @@ fn test_req_methods() {
         match req_methods!(
             req,
             Get => {
-                res_empty(status::Ok)
+                Ok(Response::with(status::Ok))
             },
             Post => {
-                res_empty(status::Ok)
+                Ok(Response::with(status::Ok))
             }
         ) {
             Ok(_) => {
