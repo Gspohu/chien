@@ -17,10 +17,12 @@ rmp = "*"
 rmp-serialize = "*"
 staticfile = "*"
 hyper = "*"
-clippy = "*"
 
 [dependencies.mime]
 git = "https://github.com/Undeterminant/mime.rs.git"
+
+[dependencies.clippy]
+git = "https://github.com/Manishearth/rust-clippy.git"
 
 [features]
 unstable = []
