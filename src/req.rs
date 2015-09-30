@@ -133,6 +133,32 @@ fn test_unacceptable_html() {
         None
     );
 }
+#[test]
+fn test_acceptable_utf8() {
+    let mut req = unsafe { super::test::new_req(method::Get) };
+    let head: &[u8] = b"application/json; charset=utf-8";
+    req.headers.set(
+        Accept::parse_header(&[head.to_owned()]).ok().unwrap()
+    );
+    assert_eq!(
+        VerifyAcceptable.before(&mut req).ok(),
+        Some(())
+    );
+}
+
+
+#[test]
+fn test_unacceptable_ascii() {
+    let mut req = unsafe { super::test::new_req(method::Get) };
+    let head: &[u8] = b"application/json; charset=ascii";
+    req.headers.set(
+        Accept::parse_header(&[head.to_owned()]).ok().unwrap()
+    );
+    assert_eq!(
+        VerifyAcceptable.before(&mut req).ok(),
+        None
+    );
+}
 
 #[test]
 fn test_acceptable_star() {
