@@ -13,13 +13,10 @@ fn mime_is_acceptable(m: &Mime) -> bool {
     let &Mime(ref tlevel, ref slevel, ref params) = m;
 
     // neither */*, application/*, nor application/json => JSON is not OK
-    if tlevel != &TopLevel::Star && (
-        tlevel != &TopLevel::Application ||
-        (
-            slevel != &SubLevel::Json &&
-            slevel != &SubLevel::Star
-        )
-    ) {
+    if tlevel != &TopLevel::Star &&
+       tlevel != &TopLevel::Application ||
+       slevel != &SubLevel::Json &&
+       slevel != &SubLevel::Star {
         return false
     }
 
@@ -133,8 +130,22 @@ fn test_unacceptable_html() {
         None
     );
 }
+
 #[test]
 fn test_acceptable_utf8() {
+    let mut req = unsafe { super::test::new_req(method::Get) };
+    let head: &[u8] = b"utf-8";
+    req.headers.set(
+        AcceptCharset::parse_header(&[head.to_owned()]).ok().unwrap()
+    );
+    assert_eq!(
+        VerifyAcceptable.before(&mut req).ok(),
+        Some(())
+    );
+}
+
+#[test]
+fn test_acceptable_utf8_json() {
     let mut req = unsafe { super::test::new_req(method::Get) };
     let head: &[u8] = b"application/json; charset=utf-8";
     req.headers.set(
@@ -146,9 +157,21 @@ fn test_acceptable_utf8() {
     );
 }
 
-
 #[test]
 fn test_unacceptable_ascii() {
+    let mut req = unsafe { super::test::new_req(method::Get) };
+    let head: &[u8] = b"ascii";
+    req.headers.set(
+        AcceptCharset::parse_header(&[head.to_owned()]).ok().unwrap()
+    );
+    assert_eq!(
+        VerifyAcceptable.before(&mut req).ok(),
+        None
+    );
+}
+
+#[test]
+fn test_unacceptable_ascii_json() {
     let mut req = unsafe { super::test::new_req(method::Get) };
     let head: &[u8] = b"application/json; charset=ascii";
     req.headers.set(
