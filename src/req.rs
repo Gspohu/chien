@@ -175,6 +175,20 @@ fn test_acceptable_star() {
 }
 
 #[test]
+fn test_acceptable_application_star() {
+    let mut req = unsafe { super::test::new_req(method::Get) };
+    let head: &[u8] = b"application/*";
+    let head: Vec<u8> = head.to_owned();
+    req.headers.set(
+        Accept::parse_header(&[head.to_owned()]).ok().unwrap()
+    );
+    assert_eq!(
+        VerifyAcceptable.before(&mut req).ok(),
+        Some(())
+    );
+}
+
+#[test]
 fn test_acceptable_no_accept() {
     let mut req = unsafe { super::test::new_req(method::Get) };
     assert_eq!(
