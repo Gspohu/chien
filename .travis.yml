@@ -6,6 +6,8 @@ addons:
       - libelf-dev
       - libdw-dev
 rust:
+  - stable
+  - beta
   - nightly
 before_script:
   - |
@@ -14,7 +16,11 @@ before_script:
 sudo: false
 script:
   - |
-      travis-cargo build &&
+      if [[ $TRAVIS_RUST_VERSION == nightly ]]; then
+        travis-cargo build -- --features clippy
+      else
+        travis-cargo build
+      fi &&
       travis-cargo test &&
       travis-cargo bench &&
       travis-cargo --only stable doc
@@ -23,5 +29,5 @@ after_success:
   - travis-cargo coveralls --no-sudo
 env:
   global:
-  - GH_REF: github.com/Undeterminant/chien.git
-  - secure: "shdZ85FRDTLr24uC7XzqIsIo9n3j7ASkMbu0CT6SROaYZ6amdrB1sYYTycEtfhiXwXe6YwKciTm04HfDlyojQsqYMKGiqyZTbE/onjkz6jEplJOkzth/kGmDgvWX3aj4qf1CLqyF0NA70L7GUAI08zWhHft4fxcvBNABnV5/X63sSu9nfR6Mgr53HJoT3XYHDbchl/95OwnxX7axISSzpmJ1BWbOBOVqaM1p3u7yoE4UetMsrzbQk3siZivLgP3i4vRJer8tqrEQYWi4tr0cYaQPRFwF4kfnWetHg/xXivELPVA7c1NeTb/KKvI3Q7UYyZRpv6n0sYsPZnSy0jABZGOE7zsKxB1i9z6qsqIwka4goUYQV/K1pVaOcv/ozeqWg1C0UGkXFOxvXcrpn8sdcQ3uc8jV4AcX2sGhEfyE5XnmSyUTAm9yYCv1ssYsNv9QQqDjnxwnTj1Bt4LOXWKsvRXdGI1KledS07x3HGtaH43C0V56TdD0K18Aqy9r8GYiKiIKV6xxrnenPPBIgFslZQzlDtfBd6SkWS/45EYx4jSCORd46PCRbOZ5ti64r8BsqIM6ljknxTGk7KChqgziq4cFEJPOlQ3fLPUNY4d5vyMI1Zt40mGnicycPzN0fdW5/cEZC5YW1v9vYe2mdTLudbxaQHFYAStbcxFrRJmtBds="
+    - GH_REF: github.com/Undeterminant/chien.git
+    - secure: "shdZ85FRDTLr24uC7XzqIsIo9n3j7ASkMbu0CT6SROaYZ6amdrB1sYYTycEtfhiXwXe6YwKciTm04HfDlyojQsqYMKGiqyZTbE/onjkz6jEplJOkzth/kGmDgvWX3aj4qf1CLqyF0NA70L7GUAI08zWhHft4fxcvBNABnV5/X63sSu9nfR6Mgr53HJoT3XYHDbchl/95OwnxX7axISSzpmJ1BWbOBOVqaM1p3u7yoE4UetMsrzbQk3siZivLgP3i4vRJer8tqrEQYWi4tr0cYaQPRFwF4kfnWetHg/xXivELPVA7c1NeTb/KKvI3Q7UYyZRpv6n0sYsPZnSy0jABZGOE7zsKxB1i9z6qsqIwka4goUYQV/K1pVaOcv/ozeqWg1C0UGkXFOxvXcrpn8sdcQ3uc8jV4AcX2sGhEfyE5XnmSyUTAm9yYCv1ssYsNv9QQqDjnxwnTj1Bt4LOXWKsvRXdGI1KledS07x3HGtaH43C0V56TdD0K18Aqy9r8GYiKiIKV6xxrnenPPBIgFslZQzlDtfBd6SkWS/45EYx4jSCORd46PCRbOZ5ti64r8BsqIM6ljknxTGk7KChqgziq4cFEJPOlQ3fLPUNY4d5vyMI1Zt40mGnicycPzN0fdW5/cEZC5YW1v9vYe2mdTLudbxaQHFYAStbcxFrRJmtBds="
