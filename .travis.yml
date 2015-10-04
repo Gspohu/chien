@@ -6,8 +6,6 @@ addons:
       - libelf-dev
       - libdw-dev
 rust:
-  - stable
-  - beta
   - nightly
 before_script:
   - |
