@@ -1,14 +1,19 @@
 #[macro_use] extern crate hyper;
 extern crate iron;
 extern crate mount;
+extern crate postgres;
 extern crate rustc_serialize;
-mod token;
+extern crate toml;
+mod config;
+mod error;
 #[macro_use] mod res;
 mod req;
 mod test;
+mod token;
 
 use iron::prelude::*;
 use mount::Mount;
+pub use self::config::Config;
 pub use self::res::*;
 pub use self::req::*;
 pub use self::token::*;
@@ -30,6 +35,11 @@ fn main(req: &mut Request) -> IronResult<Response> {
 
 pub type App = Iron<Chain>;
 pub fn app() -> App {
+    let c = match Config::new() {
+        Ok(c) => c,
+        Err(e) => panic!("error:\n{:#?}", e),
+    };
+
     let mut mount = Mount::new();
     mount.mount("/api/dev/", main);
     mount.mount("/api/", main);

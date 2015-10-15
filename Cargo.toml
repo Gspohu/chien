@@ -19,6 +19,7 @@ staticfile = "*"
 hyper = "*"
 postgres = "*"
 postgres_macros = "*"
+toml = "*"
 
 [dependencies.mime]
 git = "https://github.com/Undeterminant/mime.rs.git"

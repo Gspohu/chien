@@ -1,28 +1,14 @@
 use iron::prelude::*;
 
+use super::error::*;
 use iron::headers;
 use iron::status::Status;
 use rustc_serialize::Encodable;
 use rustc_serialize::json::as_json;
-use std::error::Error;
-use std::fmt;
 use std::io::Write;
 
 pub use iron::method;
 pub use iron::status;
-
-#[derive(Debug)]
-struct UserError;
-impl Error for UserError {
-    fn description(&self) -> &str {
-        "the user was being a dumb"
-    }
-}
-impl fmt::Display for UserError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.write_str("ERROR: the user was being a dumb")
-    }
-}
 
 #[macro_export]
 macro_rules! req_methods {

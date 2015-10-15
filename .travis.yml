@@ -5,9 +5,12 @@ addons:
       - libcurl4-openssl-dev
       - libelf-dev
       - libdw-dev
+  postgresql: 9.3
 rust:
   - nightly
 before_script:
+  - psql -c 'create database chien_test;' -U postgres
+  - echo 'postgres = { user = "postgres", db = "chien" }' > $HOME/chien.toml
   - |
       pip install 'travis-cargo<0.2' --user &&
       export PATH=$HOME/.local/bin:$PATH
