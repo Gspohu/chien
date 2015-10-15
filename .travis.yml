@@ -10,12 +10,12 @@ rust:
   - nightly
 before_script:
   - psql -c 'create database chien_test;' -U postgres
-  - echo 'postgres = { user = "postgres", db = "chien" }' > $HOME/chien.toml
   - |
       pip install 'travis-cargo<0.2' --user &&
       export PATH=$HOME/.local/bin:$PATH
 sudo: false
 script:
+  - echo 'postgres = { user = "postgres", db = "chien_test" }' > chien.toml
   - |
       if [[ $TRAVIS_RUST_VERSION == nightly ]]; then
         travis-cargo build -- --features clippy
