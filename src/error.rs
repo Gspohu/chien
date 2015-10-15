@@ -13,3 +13,9 @@ impl fmt::Display for UserError {
         f.write_str("ERROR: bad request")
     }
 }
+
+#[test]
+fn test_error() {
+    assert_eq!(UserError.description(), "bad request");
+    assert_eq!(format!("{}", UserError), "ERROR: bad request");
+}

@@ -13,6 +13,7 @@ mod token;
 
 use iron::prelude::*;
 use mount::Mount;
+use std::error::Error;
 pub use self::config::Config;
 pub use self::res::*;
 pub use self::req::*;
@@ -34,11 +35,8 @@ fn main(req: &mut Request) -> IronResult<Response> {
 }
 
 pub type App = Iron<Chain>;
-pub fn app() -> App {
-    let c = match Config::new() {
-        Ok(c) => c,
-        Err(e) => panic!("error:\n{:#?}", e),
-    };
+pub fn app() -> Result<App, Box<Error>> {
+    try!(Config::new());
 
     let mut mount = Mount::new();
     mount.mount("/api/dev/", main);
@@ -46,10 +44,10 @@ pub fn app() -> App {
 
     let mut chain = Chain::new(mount);
     chain.link_before(VerifyAcceptable);
-    Iron::new(chain)
+    Ok(Iron::new(chain))
 }
 
 #[test]
-fn test_app_loads_without_panic() {
-    app();
+fn test_app_loads_without_error() {
+    app().unwrap();
 }

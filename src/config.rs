@@ -1,3 +1,4 @@
+use std::error::Error;
 use std::io;
 use std::io::Read;
 use std::fs::File;
@@ -6,18 +7,11 @@ use postgres;
 
 const CONFIG_TOML: &'static str = "./chien.toml";
 
-#[derive(Debug)]
-pub enum ConfigError {
-    InvalidFile(io::Error),
-    Invalid(&'static str),
-    CannotConnectPostgres(postgres::error::ConnectError),
-}
-
 pub struct Config {
     psql_conn: postgres::Connection,
 }
 
-fn parse_db_params(parsed: Option<Table>) -> (Option<postgres::UserInfo>, Option<String>){
+fn parse_db_params(parsed: Option<Table>) -> (Option<postgres::UserInfo>, Option<String>) {
     // if there's a table
     if let Some(table) = parsed {
         // if there's a postgres section
@@ -40,7 +34,6 @@ fn parse_db_params(parsed: Option<Table>) -> (Option<postgres::UserInfo>, Option
                     )
                 );
 
-            println!("{:?} {:?}", user_params, database);
             (user_params, database)
         } else {
             (None, None)
@@ -51,15 +44,10 @@ fn parse_db_params(parsed: Option<Table>) -> (Option<postgres::UserInfo>, Option
 }
 
 impl Config {
-    pub fn new() -> Result<Config, ConfigError> {
-        let mut config_file = match File::open(CONFIG_TOML) {
-            Ok(f) => f,
-            Err(e) => return Err(ConfigError::InvalidFile(e)),
-        };
+    pub fn new() -> Result<Config, Box<Error>> {
+        let mut config_file = try!(File::open(CONFIG_TOML));
         let mut config_s = String::new();
-        if let Err(e) = config_file.read_to_string(&mut config_s) {
-            return Err(ConfigError::InvalidFile(e))
-        }
+        try!(config_file.read_to_string(&mut config_s));
 
         // grab the data from a file
         let parsed = Parser::new(&config_s).parse();
@@ -75,13 +63,10 @@ impl Config {
         };
 
         // connect to the database
-        let conn = match postgres::Connection::connect(
+        let conn = try!(postgres::Connection::connect(
             conn_params,
-            &postgres::SslMode::None
-        ) {
-            Ok(c) => c,
-            Err(e) => return Err(ConfigError::CannotConnectPostgres(e)),
-        };
+            &postgres::SslMode::None,
+        ));
 
         // return the config
         Ok(Config {
