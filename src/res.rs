@@ -1,11 +1,10 @@
 use iron::prelude::*;
 
-use super::error::*;
 use iron::headers;
 use iron::status::Status;
 use rustc_serialize::Encodable;
 use rustc_serialize::json::as_json;
-use std::io::Write;
+use std::io::{Error, ErrorKind, Write};
 
 pub use iron::method;
 pub use iron::status;
@@ -74,9 +73,25 @@ pub fn res_empty(code: Status) -> IronResult<Response> {
 }
 
 pub fn err_method_not_allowed<T>() -> IronResult<T> {
-    Err(IronError::new(UserError, status::MethodNotAllowed))
+    Err(
+        IronError::new(
+            Error::new(
+                ErrorKind::NotFound,
+                "Method Not Allowed"
+            ),
+            status::MethodNotAllowed
+        )
+    )
 }
 
 pub fn err_not_acceptable<T>() -> IronResult<T> {
-    Err(IronError::new(UserError, status::NotAcceptable))
+    Err(
+        IronError::new(
+            Error::new(
+                ErrorKind::NotFound,
+                "Not Acceptable"
+            ),
+            status::NotAcceptable
+        )
+    )
 }

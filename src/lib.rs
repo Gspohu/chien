@@ -5,7 +5,6 @@ extern crate postgres;
 extern crate rustc_serialize;
 extern crate toml;
 mod config;
-mod error;
 #[macro_use] mod res;
 mod req;
 mod test;
